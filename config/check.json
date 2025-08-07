@@ -1,0 +1,1454 @@
+[
+  {
+    "category": "基础配置",
+    "name": "重点机型管控",
+    "version": "",
+    "prerequisite": "项目拉取MP分支后改功能需要去除",
+    "adbCommands": ["shell getprop ro.tran.remotelock.support",
+      "shell getprop ro.tran.remotelock.support"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.SPD定义“是”的项目执行 2.SPD定义“否”或项目拉取MP分支后执行，无返回值即代表合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "基础配置",
+    "name": "Fingerprint版本号",
+    "version": "",
+    "prerequisite": "OS15.0.1及之后的项目执行",
+    "adbCommands": ["shell getprop ro.build.version.incremental"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "1.Fingerprint版本号格式与软件版本号命名规范一致，例：100001，其中100代表迭代版本号，001代表项目自增版本号。迭代版本号，tOS MP前从001开始迭代，不能超过099。tOS MP从100开始迭代，不能超过199。详情请在软件版本号命名规范文档中搜索“Fingerprint命名规则”。2.Fingerprint版本号与SPD定义格式一致。",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+  "category": "基础配置",
+  "name": "Brand name",
+  "version": "",
+  "prerequisite": "",
+  "adbCommands": ["shell getprop ro.product.brand"],
+  "commandExpectedMap": {
+    "0": [""]
+  },
+  "conditionType": "QUERY_ONLY",
+  "allMustPass": false,
+  "note": "返回值与SPD定义一致",
+  "launchApp": "",
+  "logFilter": ""
+  },
+  {
+    "category": "基础配置",
+    "name": "Product name",
+    "version": "",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.name"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "返回值与SPD定义一致",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "基础配置",
+    "name": "Device name",
+    "version": "",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.device"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "返回值与SPD定义一致",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "基础配置",
+    "name": "Model name",
+    "version": "",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.model"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "返回值与SPD定义一致",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "基础配置",
+    "name": "Manufacture name",
+    "version": "",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.Manufacturer"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "返回值与SPD定义一致",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "基础配置",
+    "name": "Slim 版本",
+    "version": "",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran_slim_support"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "返回值与SPD定义一致",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "Gift",
+    "version": "2.0",
+    "prerequisite": "1.Root版本，不出现时换个应用 2.MT6580不支持，展锐不支持",
+    "adbCommands": ["shell logcat -c",
+      "shell am force-stop com.google.android.apps.youtube.music",
+      "shell sleep 1",
+      "shell am start -n com.google.android.apps.youtube.music/.activities.MusicActivity",
+      "shell sleep 3",
+      "logcat -d | grep -e MEOW -e libARC",
+      "shell getprop ro.hardware.egl"],
+    "commandExpectedMap": {
+      "5": ["libMEOW_gift: open /vendor/etc/arc.ini",
+        "libMEOW_gift: open /data/performance/gift/arc.ini"],
+      "6": ["meow"]
+    },
+    "conditionType": "LOG_FILTER",
+    "allMustPass": true,
+    "note": "1.APP打开时获取的log中包含以下字段中的其中一个即可：libMEOW_gift:open /vendor/etc/arc.ini或libMEOW_gift:open /data/performance/gift/arc.ini，(备注：版本号从1.0升级为2.0，1.0和DFT2.0会一起导入，验证方法不变)",
+    "launchApp": "com.google.android.apps.youtube.music",
+    "logFilter": "grep -e MEOW -e libARC",
+    "shellSessionRequired": "true"
+  },
+  {
+    "category": "功耗",
+    "name": "Power lab 2.0",
+    "version": "2.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop persist.tran.layercontrol.support",
+      "shell getprop ro.tran.powerhub.support"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": true,
+    "note": "1.返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "45HZ静态画面降帧",
+    "version": "NA",
+    "prerequisite": "1.Root版本执行",
+    "adbCommands": ["shell cat proc/mtkfb | grep -iE 'vfp_low_power'"],
+    "commandExpectedMap": {
+      "0": ["[vfp_low_power=0]"]
+    },
+    "conditionType": "CONTAINS",
+    "allMustPass": false,
+    "note": "有返回不等于0的值(一般都是上4位数)，若关键字与下面例子中的不一致，可询问开发卢雕。注：a.找不到文件表示不支持 b.关键字vfp_low_power=0表示没开，vfp_low_power没有返回值就是没有合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "Top30小游戏优化",
+    "version": "NA",
+    "prerequisite": "Root版本执行",
+    "adbCommands": ["shell cat /vendor/etc/resolution_tuner_app_list.xml",
+      "shell cat /data/performance/gift/arc.ini"],
+    "commandExpectedMap": {
+      "0": ["包含TXT文本第部分所有包名"],
+      "1": ["包含TXT文本第部分所有包名"]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "1.与txt文本第一部分包名检查，涵盖txt文本所有的包名，则表示有导入；反之，则不支持，找不到文件为不支持 2.与txt文本第二部分进行检查，涵盖txt文本所有的包名，则表示有导入；反之，则不支持，找不到文件为不支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "资源管控(长续航模式)",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell service list | findstr tran_aipl"],
+    "commandExpectedMap": {
+      "0": ["com.transsion.aipowerlab.ITranAipowerlabManager"]
+    },
+    "conditionType": "CONTAINS",
+    "allMustPass": false,
+    "note": "输出包含[com.transsion.aipowerlab.ITranAipowerlabManager]即为合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "TGPA专项优化",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | grep ro.tgpa.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "达尔文Darwin Engine1.5",
+    "version": "1.5",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop vendor.prop.pnp.fpsgo.feature.state"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "RT1.0(DRT1.0)",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.vendor.app_resolution_tuner"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "游戏温升体验优化(Darwin Engine3.0)",
+    "version": "3.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.dar.thermal_core_support",
+      "shell getprop ro.transsion.frame_override.support"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": true,
+    "note": "返回值为均1，两点均需满足",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "thermal通用架构",
+    "version": "1.0",
+    "prerequisite": "root版本",
+    "adbCommands": ["shell getprop | grep thermalsapce"],
+    "commandExpectedMap": {
+      "0": ["[ro.vendor.thermalspace.support]:[1]"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "[ro.vendor.thermalspace.support]为1代表支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "智能刷新3.2/智能刷新率",
+    "version": "3.2",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran_performance_auto_refresh.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1表示智能刷新3.2打开",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "麦哲伦(智能刷新)/智能刷新率",
+    "version": "3.1",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.transsion.magellan.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1表示开启",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "智能刷新率3.5",
+    "version": "3.5",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.transsion.tran_refresh_rate.support",
+      "shell getprop ro.tran_custom_high_mode_custom.support"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1表示合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "AIFRE(智能稳帧)/Esports Pro--稳帧引擎(AI-FRE)",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop vendor.prop.pnp.fpsgo.feature.state"],
+    "commandExpectedMap": {
+      "0": ["0x1f031", "0xf031"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回0x1f031或0xf031即代表合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "夜间断网临时方案",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop persist.tran.ai.net.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.返回值为1 即为合入 2.①只能断网开关状态默认开启 ②前两个字段返回值为true即导入，例如：ImNetController SUPPORT = true, UiSwitch = true 注：AI睡眠断网技术仅比夜间断网临时方案多了个字段，因此，若返回的是ImNetController SUPPORT = true，UiSwitch = true, isOtaAllowpolicy = true/false,那么合入的是AI睡眠断网技术",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "屏幕动态背光",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran_app_brightness_limit.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1 即为合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "温升瞬态交互体验优化",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.vendor.powerhal.thermal_ux_support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "低电量限制刷新率",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran_low_battery_60hz_refresh_rate.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "后台管控技术-手动清理(ram ≥ 8G)",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | grep ro.manual.clean.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "后台管控技术-灭屏管控(ram ≥ 8G)",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | grep ro.standbyturbo.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "后台管控技术-多任务切换(ram ≥ 4G)",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": [
+      "shell getprop | grep persist.sys.tran.tracker.died.process",
+      "shell getprop | grep persist.sys.tran.tracker.recent.task.process.adjust",
+      "shell getprop | grep persist.sys.tran.tracker.local.died.process"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"],
+      "2": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "后台管控技术1.1",
+    "version": "1.1",
+    "prerequisite": "",
+    "adbCommands": [
+      "shell getprop ro.healthstandard.support",
+      "shell getprop persist.sys.tran.healthstandard.support"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": true,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "Griffin",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.griffin.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "高温背光",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["find /product -name tran_thermal_light_limit_config.xml 2>/dev/null"],
+    "commandExpectedMap": {
+      "0": ["tran_thermal_light_limit_config.xml"]
+    },
+    "conditionType": "CONTAINS",
+    "allMustPass": false,
+    "note": "包含该文件",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "Darwin Engine 3.0",
+    "version": "3.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.dar.thermal_core",
+      "shell getprop ro.dar.thermal_core.support"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "系统冻结",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran.hiber.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "感知调度",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": [
+      "shell getprop ro.product.transched.support",
+      "shell getprop ro.vendor.transched.support",
+      "shell getprop ro.vendor.transched.version"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"],
+      "2": ["v2.0"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "Sleep Master",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.sleep_master"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "短视频优化",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | grep persist.tran.layercontrol.support"],
+    "commandExpectedMap": {
+      "0": ["[persist.tran.layercontrol.support]: [1]"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "功耗",
+    "name": "视频畅聊",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | grep persist.tran.videocallpowersave.support"],
+    "commandExpectedMap": {
+      "0": ["[persist.tran.videocallpowersave.support]: [1]"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "system_server binder buffer优化方案",
+    "version": "NA",
+    "prerequisite": "1.非user(前期)/user(RC后) 2.Kernel-5.10及以上、Kernel-4.19-lc、以及展锐项目不支持",
+    "adbCommands": ["shell 'cat /proc/config.gz > /sdcard/123.gz'",
+      "shell zcat /sdcard/123.gz | findstr CONFIG_TRAN_ANDROID_BINDER_BLOCK_MONITOR"],
+    "commandExpectedMap": {
+      "0": [""],
+      "1": ["CONFIG_TRAN_ANDROID_BINDER_BLOCK_MONITOR=y"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值CONFIG_TRAN_ANDROID_BINDER_BLOCK_MONITOR=y",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "system_server binder thread耗尽优化方案",
+    "version": "NA",
+    "prerequisite": "1.非user(前期)/user(RC后)system_server binder buffer优化方案执行后可不执行此步骤 2.Kernel-5.10及以上、Kernel-4.19-lc、以及展锐项目不支持",
+    "adbCommands": ["shell 'cat /proc/config.gz > /sdcard/123.gz'",
+      "shell zcat /sdcard/123.gz | findstr CONFIG_TRAN_ANDROID_BINDER_BLOCK_MONITOR"],
+    "commandExpectedMap": {
+      "0": [""],
+      "1": ["CONFIG_TRAN_ANDROID_BINDER_BUFFER_EXHAUST_MONITOR=y"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "CONFIG_TRAN_ANDROID_BINDER_BUFFER_EXHAUST_MONITOR=y",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "稳定性关键问题提炼方案",
+    "version": "NA",
+    "prerequisite": "展锐项目T上开始支持",
+    "adbCommands": ["shell getprop ro.vendor.transsion.aftersales.support",
+      "shell getprop ro.transsion.aftersales.support",
+    "shell getprop persist.sys.exceptionreport.support",
+    "shell getprop persist.vendor.ecxeption.filesize"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"],
+      "2": ["1"],
+      "3": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": true,
+    "note": "返回值为1即导入，但需四条同时满",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "xml保护",
+    "version": "NA",
+    "prerequisite": "展锐项目S上开始支持",
+    "adbCommands": ["shell getprop ro.vendor.transsion.xml.support",
+      "shell getprop ro.vendor.tran.xml.support",
+      "shell getprop ro.tran.fileprotect.support"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["1"],
+      "2": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.S之前。返回值为1即导入 2.S及T项目。返回值为1即导入 3.U及U以后。项目返回值为1即导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "XML保护方案(稳定性文件异常类)",
+    "version": "3.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran.fileprotect.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "结果为1表示生效",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "USIC专项",
+    "version": "NA",
+    "prerequisite": "展锐项目T上开始支持",
+    "adbCommands": ["shell getprop persist.sys.usic.support"],
+    "commandExpectedMap": {
+      "0": ["true"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为true即导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "stuck logo",
+    "version": "NA",
+    "prerequisite": "展锐项目不支持，需判断SPD定义是否正确",
+    "adbCommands": ["shell getprop init.svc.stucklogo"],
+    "commandExpectedMap": {
+      "0": ["true"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "有返回值即导入(stopped是导入的)，返回未找到文件或者不存在返回值则未导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "StuckLogo(稳定性专项2023)",
+    "version": "NA",
+    "prerequisite": "1.MTK S/T/U及之后新项目统一导入 2.展锐部分售后异常严重老项目，以及U之后新项目统一导入",
+    "adbCommands": ["shell getprop init.svc.stucklogo"],
+    "commandExpectedMap": {
+      "0": ["running"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.手机设置密码，然后手机重启 2.手机重启后，在密码界面不要解锁，不要解锁 3.输入adb命令查看状态 结果返回running，就是2.0",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "crash split",
+    "version": "NA",
+    "prerequisite": "1.展锐项目不支持 2.导入版本非user(前期)/user(RC后)",
+    "adbCommands": ["shell getprop persist.sys.crashsplit.hardware"],
+    "commandExpectedMap": {
+      "0": ["0"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为0则支持，不支持则无返回值",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "大数据看板算法模型&埋点方案",
+    "version": "NA",
+    "prerequisite": "1.展锐项目不支持 2.导入版本非user(前期)/user(RC后)",
+    "adbCommands": ["shell getprop ro.product.trantabe.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "三方连续报错优化方案",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.trantabe.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "三方权限报错优化方案",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.trantabe.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "TABE 1.0方案",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.trantabe.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "apex加固方案",
+    "version": "1.0&2.0",
+    "prerequisite": "1.MTK S/T/U及之后新项目统一导入 2.展锐部分售后异常严重老项目，以及U之后新项目统一导入",
+    "adbCommands": ["shell getprop | grep table"],
+    "commandExpectedMap": {
+      "0": ["true"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为true则导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "apex升级加固方案(稳定性2023",
+    "version": "3.0",
+    "prerequisite": "Root版本",
+    "adbCommands": ["shell getprop ro.tran.dm.apex.support",
+      "shell ls /tranfs/SDD/apex_parse_fail/ENABLE"],
+    "commandExpectedMap": {
+      "0": ["true"],
+      "1": ["/tranfs/SDD/apex_parse_fail/ENABLE"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.返回值为true则导入 2.返回/tranfs/SDD/apex_parse_fail/ENABLE代表支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "apex加固方案(稳定性2023)",
+    "version": "3.0",
+    "prerequisite": "Root版本",
+    "adbCommands": ["shell getprop ro.tran.apex.dump.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "结果为1表示生效",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "keystore备份方案(稳定性文件异常类)",
+    "version": "2.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.vendor.tran.keystoredb.protect.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "结果为1表示生效",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "fec优化方案(稳定性2023)/fec优化方案(稳定性异常类)-MTK",
+    "version": "2.0",
+    "prerequisite": "",
+    "adbCommands": ["shell cat /proc/pl_lk | grep otaenablefec"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "存在返回值即为导入，返回值不能是找不到文件或者无权访问等 1.使用root版本执行 2.SPD定义该专项：①内核5.10版本不测试。但需判断SPD定义是否准确，内核版本为5.10若定义支持，提单修改SPD ②除了内核版本5.10之外，均需执行 3.SPD未定义该专项：①内核版本=5.10，不测试，也无需关注是否定义 ②非5.10需执行，结果与预期一致则需提单要求SPD定义",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "fec优化方案(稳定性2023)/fec优化方案(稳定性异常类)-展锐",
+    "version": "2.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.boot.otaenablefec"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "存在返回值即为导入，返回值不能是找不到文件或者无权访问等 1.使用root版本执行 2.SPD定义该专项：①内核5.10版本不测试。但需判断SPD定义是否准确，内核版本为5.10若定义支持，提单修改SPD ②除了内核版本5.10之外，均需执行 3.SPD未定义该专项：①内核版本=5.10，不测试，也无需关注是否定义 ②非5.10需执行，结果与预期一致则需提单要求SPD定义",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "jni fatallerror优化方案(稳定性专项2023)",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran.jnifatal.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "Nobarier优化方案(稳定性专项2023)-展锐",
+    "version": "1.0",
+    "prerequisite": "Kernel5.10及其之后的Kernel版本不支持",
+    "adbCommands": ["shell 'zcat /proc/config.gz | grep CONFIG_SPRD_FLUSH_DEV'"],
+    "commandExpectedMap": {
+      "0": ["CONFIG_SPRD_FLUSH_DEV=y"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "打印出 CONFIG_SPRD_FLUSH_DEV=y 即为支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "Nobarier优化方案(稳定性专项2023)-MTK",
+    "version": "1.0",
+    "prerequisite": "Kernel5.10及其之后的Kernel版本不支持",
+    "adbCommands": ["shell 'zcat /proc/config.gz | grep CONFIG_SPRD_FLUSH_DEV'"],
+    "commandExpectedMap": {
+      "0": ["CONFIG_SPRD_FLUSH_DEV=y"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "打印出 CONFIG_PANIC_FLUSH_ENABLE=y 即为支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "fbe密钥备份(稳定性2023)",
+    "version": "1.0",
+    "prerequisite": "Root版本",
+    "adbCommands": ["shell ls /data/misc/vold/user_keys_bak/ce/0/current"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "返回值有文件列表就合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "LockSettings SPBLOB Key备份方案(稳定性2023)",
+    "version": "1.0",
+    "prerequisite": "Root版本",
+    "adbCommands": ["shell ls /data/system/users/0/spblob"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "有返回值代表合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "软件稳定性",
+    "name": "apex证书优化",
+    "version": "1.0",
+    "prerequisite": "Root版本",
+    "adbCommands": ["shell getprop ro.tran.dm.apex.support",
+    "shell ls/tranfs/SDD/apex_parse_fail/ENABLE"],
+    "commandExpectedMap": {
+      "0": ["true"],
+      "1": ["/tranfs/SDD/apex_parse_fail/ENABLE"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.返回值为true 2.返回/tranfs/SDD/apex_parse_fail/ENABLE为导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "充电",
+    "name": "OTG反向充电-MTK",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.vendor.tran.sw_aiotg_support"],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "有大电流充电选项",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "充电",
+    "name": "OTG反向充电-展锐",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran.sw_aiotg_support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "充电",
+    "name": "无线充电",
+    "version": "NA",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop os.charging_animation_wireless_power",
+      ""],
+    "commandExpectedMap": {
+      "0": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "1.支持返回支持的功率，不支持返回0或无返回值。2.连接无线充电器后锁屏界面正常显示无线充电。3.查看锁屏界面充电动画字样是否显示文档中定义一致，若未显示快充动画，需多等一会",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "充电",
+    "name": "AI充电智能保护",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran_ai_charging_event_track"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回1表示宏控打开，功能支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "充电",
+    "name": "AI充电智能保护",
+    "version": "2.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.tran_ai_charging_event_track",
+      "dumpsys package com.transsion.uxdetector grep -i versionname",
+      "dummpsys activity services | grep uxdetector"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": [""],
+      "2": [""]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回1表示宏控打开，功能支持 2.安卓V及之前项目执行 3.查看是否有输出，存在即表明功能开启",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "充电",
+    "name": "旁路充电1.2",
+    "version": "1.2",
+    "prerequisite": "仅GT20支持。例X6871",
+    "adbCommands": ["shell getprop ro.os_game_auto_bypass.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1代表合入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "充电",
+    "name": "充电温控(1.0)",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.os_charge_temperature.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "屏幕&影像",
+    "name": "P3色域",
+    "version": "1.0",
+    "prerequisite": "Root版本",
+    "adbCommands": ["shell getprop ro.vendor.camera.isp.support.colorspace",
+      "dumpsys SurfaceFlinger | grep -A5 -e 'Color Mode' -e 'color mode'"],
+    "commandExpectedMap": {
+      "0": ["1"],
+      "1": ["DISPLAY_P3DISPLAY_P3"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.返回值为1。 2.不预装智能图库项目无法执行此项，请注意判断PD定义是否正确。3.返回值存在current color mode:Color Mode::DISPLAY_P3(9)关键词则导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "屏幕&影像",
+    "name": "物理映射的自动背光优化(基于H模型)",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["dumpsys display | grep PhysicalMappingStrategy",
+      "shell getprop ro.transsion.physical.backlight.optimization"],
+    "commandExpectedMap": {
+      "0": ["PhysicalMappingStrategy"],
+      "1": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": true,
+    "note": "返回值为PhysicalMappingStrategy，两个都满足表示导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "屏幕&影像",
+    "name": "跨设备显示色彩一致性",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.vendor.pq.tran_disp_c3d_support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1支持，否则不支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "屏幕&影像",
+    "name": "屏幕显示一致性和美化研究",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.vendor.pq.tran_disp_ccm_cali_support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "IOManager",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.vendor.iomanager.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1则导入",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PM1.1",
+    "version": "1.1",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | findstr ro.griffin.version"],
+    "commandExpectedMap": {
+      "0": ["[ro.griffin.version]:[1.1]"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值[ro.griffin.version]:[1.1]",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PM2.0",
+    "version": "2.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | findstr ro.griffin.version"],
+    "commandExpectedMap": {
+      "0": ["[ro.griffin.version]:[2.0]"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值[ro.griffin.version]:[2.0]",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PM2.1",
+    "version": "2.1",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | findstr griffin",
+      "shell getprop | findstr proc_m",
+      "shell getprop | findstr onekey"],
+    "commandExpectedMap": {
+      "0": ["[ro.griffin.version]:[2.0]"],
+      "1": ["[ro.proc_mgr.support]:[1]"],
+      "2": ["[ro.onekeyclean_support]:[1]"]
+    },
+    "conditionType": "CONTAINS",
+    "allMustPass": false,
+    "note": "返回值包含[ro.griffin.version]:[2.0]、[ro.proc_mgr.support]:[1]、[ro.onekeyclean_support]:[1]",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PM3.0",
+    "version": "3.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.product.apm",
+      "shell getprop ro.product.apm.version"],
+    "commandExpectedMap": {
+      "0": ["[ro.product.apm]:[1]"],
+      "1": ["[ro.product.apm.version]:[3.0]"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为[ro.product.apm]:[1]、",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PM4.0",
+    "version": "4.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop persist.sys.pm_buriedpoint.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PM4.1",
+    "version": "4.1",
+    "prerequisite": "项目支持多个内存时，所有内存均需执行，请按照预期结果判断是否支持。",
+    "adbCommands": ["shell getprop persist.sys.apm.limit_block_mode"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.返回值为1即为导入。项目是否支持需依据内存大小判断，大于等于8G内存配置支持，小于8G内存配置不支持，若项目同时支持，则需分开执行，例：项目支持4G，6G，8G，12G，那么4G和6G返回非1，8G和12G需返回1",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PNP 1.0",
+    "version": "1.0",
+    "prerequisite": "1/2 返回一个即可",
+    "adbCommands": ["shell getprop | findstr pnpmgr",
+      "shell getprop | findstr pnpmgr"],
+    "commandExpectedMap": {
+      "0": ["[persist.vendor.pnpmgr.enable]:[1]"],
+      "1": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "1.关键字返回值为1 [persist.vendor.pnpmgr.enable]:[1] [persist.vendor.pnpmgr.gamemode.enable]:[1] 2.关键字返回值为 [persist.vendor.pnpmgr.game.ctl]:[enbale] [ro.vendor.pnpmgr.game.record]:[enable] [ro.vendor.pnpmgr.support]:[1]",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PNP 2.0",
+    "version": "2.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop vendor.prop.pnp.version"],
+    "commandExpectedMap": {
+      "0": ["2.0"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为版本号",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PNP 3.0",
+    "version": "3.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | grep pnp | grep fpsgo"],
+    "commandExpectedMap": {
+      "0": ["[vendor.prop.pnp.fpsgo.boost]:[enable]"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "包含[vendor.prop.pnp.fpsgo.boost]:[enable] [vendor.prop.pnp.fpsgo.driver.stable]:[on] [vendor.prop.pnp.fpsgo.state]:[running]",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "PNP 3.1",
+    "version": "3.1",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop vendor.prop.pnp.version"],
+    "commandExpectedMap": {
+      "0": ["3.0"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为版本号",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "Memory反碎片化",
+    "version": "1.0",
+    "prerequisite": "1.Kernel为5.x及以上不支持 2.root版本检查，非root版本会提示无权限",
+    "adbCommands": ["shell getprop cat /proc/reversebuddyinfo"],
+    "commandExpectedMap": {
+      "0": [""],
+      "1": [""]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "/proc/reversebuddyinfo节点，节点下 Normal/HighMem后的数字全部为0，则检测Failed，反之检测Pass",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "自动重启",
+    "version": "NA",
+    "prerequisite": "1.安卓Q/R 2.安卓S及之后",
+    "adbCommands": ["shell getprop ro.vendor.transsion.autoReboot",
+      "shell getprop ro.product.transsion.autoReboot"],
+    "commandExpectedMap": {
+      "0": ["true"],
+      "1": ["true"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值为true",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "CloudEngine",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["dumpsys activity service CloudEngineService dump"],
+    "commandExpectedMap": {
+      "0": [".frameworks.cloudengine.CloudEngineService"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "可以查看到当前注册的所有的ID信息，如果相应的ID没有在这个dump列表中，就说明没有通过CloudEngine(为合入返回值：No service match：CloudEngineService Use -h for help.已合入存在如下返回值即可：SERVICE com.transsion.trancare/.frameworks.cloudengine.CloudEngineService)",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "TP跟手性",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop ro.transsion.appturbo.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值1代表功能生效，为0为空为无效",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "超级触控",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["shell getprop | grep ro.transsion.appturbo.setting.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "返回值1为支持，返回0或空不支持",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "Zram Writeback",
+    "version": "NA",
+    "prerequisite": "Root版本",
+    "adbCommands": ["shell getprop ro.vendor.zram_writeback.support"],
+    "commandExpectedMap": {
+      "0": ["1"]
+    },
+    "conditionType": "EQUALS",
+    "allMustPass": false,
+    "note": "1.需 ls -l /data/per_boot/zram_swap查看文件是否存在 2.返回值为1 需满足两点",
+    "launchApp": "",
+    "logFilter": ""
+  },
+  {
+    "category": "性能",
+    "name": "Write Booster(加速引擎)",
+    "version": "1.0",
+    "prerequisite": "",
+    "adbCommands": ["find /sys -name wb_avail_buf | xargs cat"],
+    "commandExpectedMap": {
+      "0": ["0x"]
+    },
+    "conditionType": "QUERY_ONLY",
+    "allMustPass": false,
+    "note": "1.Root版本 2.此专项仅UFS项目才可能会支持，EMMC项目不支持，因此EMMC项目不执行仅判断SPD定义是否正确，如何判断如下，user_root版本，看下面任一节点，cat proc/tran_healthinfo/healthinfo_show   flash_type=EMMC，返回EMMC 即为EMMC项目",
+    "launchApp": "",
+    "logFilter": ""
+  }
+]

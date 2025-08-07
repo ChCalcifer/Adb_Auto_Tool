@@ -1,0 +1,42 @@
+[
+  {
+    "category": "Stability",
+    "name": "GL_SAR",
+    "version": "V1.0",
+    "prerequisite": "None",
+    "adbCommand": "shell getprop ro.tran_gl_sar.support",
+    "expectedValue": "1",
+    "conditionType": "EQUALS",
+    "note": "检查GL_SAR支持状态"
+  },
+  {
+    "category": "Stability",
+    "name": "system_server binder buffer优化方案-1",
+    "version": "V2.1",
+    "prerequisite": "Android 10+",
+    "adbCommand": "shell 'cat /proc/config.gz > /sdcard/123.gz'",
+    "expectedValue": "",
+    "conditionType": "EQUALS",
+    "note": "binder buffer优化方案"
+  },
+  {
+    "category": "Stability",
+    "name": "MemoryLeak",
+    "version": "V1.5",
+    "prerequisite": "Root权限",
+    "adbCommand": "shell dumpsys meminfo",
+    "expectedValue": "0K",
+    "conditionType": "CONTAINS",
+    "note": "内存泄漏检测"
+  },
+  {
+    "category": "Performance",
+    "name": "CPULoad",
+    "version": "V1.2",
+    "prerequisite": "None",
+    "adbCommand": "shell top -n 1",
+    "expectedValue": "idle",
+    "conditionType": "CONTAINS",
+    "note": "CPU负载检查"
+  }
+]
