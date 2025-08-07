@@ -1,17 +1,47 @@
 package com.calcifer;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import com.calcifer.controller.MainController;
+import com.calcifer.service.AdbService;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+/**
+ * @author CYC
+ */
+public class MainApp extends Application {
+
+    private static MainController controller;
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/main.fxml"));
+        Parent root = loader.load();
+        controller = loader.getController();
+
+        primaryStage.getIcons().addAll(
+
+                new Image(getClass().getResourceAsStream("/images/icon.ico"))
+        );
+
+        Scene scene = new Scene(root, 1300, 700);
+        primaryStage.setTitle("SPD CHECK TOOL");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        AdbService.initializeConfigDirectory();
+
+        // 添加关闭钩子
+        primaryStage.setOnCloseRequest(event -> {
+            controller.shutdown();
+        });
+    }
+
+    public static void main(String[] args) {
+        System.out.println("JavaFX Version: " + System.getProperty("javafx.version"));
+        Application.launch(args);
     }
 }

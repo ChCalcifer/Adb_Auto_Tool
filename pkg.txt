@@ -1,0 +1,13 @@
+--name "SPD CEHCK TOOL"
+--type exe
+--input target
+--main-jar original-SPDCHECK-1.0.0.0.jar
+--main-class com.calcifer.MainApp
+--module-path "D:/Download/Google/tools/openjfx-21.0.4_windows-x64_bin-sdk/javafx-sdk-21.0.4/lib"
+--runtime-image target/jre
+--dest dist
+--win-shortcut
+--win-menu
+--win-dir-chooser
+--icon src/main/resources/images/icon.ico 
+

@@ -5,13 +5,281 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.calcifer</groupId>
-    <artifactId>Tran_SPD_Check</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>SPDCHECK</artifactId>
+    <version>1.0.0.0</version>
+    <packaging>jar</packaging>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <javafx.version>21.0.4</javafx.version> <!-- 修正版本号 -->
+        <javafx.home>D:\Download\Google\tools\openjfx-21.0.4_windows-x64_bin-sdk\javafx-sdk-21.0.4</javafx.home>
     </properties>
-    
+
+    <dependencies>
+        <!-- JavaFX 依赖 -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+
+        <!-- Apache Commons Exec -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-exec</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.calcifer.MainApp</mainClass>
+                                </transformer>
+                            </transformers>
+                            <!-- 特别处理JavaFX -->
+                            <filters>
+                                <filter>
+                                    <artifact>org.openjfx:*</artifact>
+                                    <includes>
+                                        <include>**</include>
+                                    </includes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>21</release>
+                    <encoding>UTF-8</encoding>
+                    <source>21</source>
+                    <target>21</target>
+<!--                    <compilerArgs>-->
+<!--                        &lt;!&ndash; Windows路径分隔符使用分号 &ndash;&gt;-->
+<!--                        <arg>&#45;&#45;module-path</arg>-->
+<!--                        <arg>${javafx.home}/lib;${project.build.directory}/modules</arg>-->
+<!--                        <arg>&#45;&#45;add-modules</arg>-->
+<!--                        <arg>javafx.controls,javafx.fxml</arg>-->
+<!--                        &lt;!&ndash; 添加未命名模块读取权限 &ndash;&gt;-->
+<!--                        <arg>&#45;&#45;add-reads</arg>-->
+<!--                        <arg>com.calcifer.spdcheck=ALL-UNNAMED</arg>-->
+<!--                    </compilerArgs>-->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.calcifer.MainApp</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- 修正后的Shade插件 -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.calcifer.MainApp</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>jpackage</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jpackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 必需参数 -->
+                    <name>SPDCHECK</name>
+                    <mainClass>com.calcifer.MainApp</mainClass>
+                    <mainJar>SPDCHECK-1.0.0.0.jar</mainJar>
+                    <input>${project.build.directory}</input>
+
+                    <!-- 关键修复：使用destination替代dest -->
+                    <destination>${project.build.directory}/jpackage</destination>
+
+                    <!-- Windows配置 -->
+                    <winMenu>true</winMenu>
+                    <winShortcut>true</winShortcut>
+                    <winDirChooser>true</winDirChooser>
+                    <icon>${project.basedir}/src/main/resources/images/icon.ico</icon>
+
+                    <!-- JVM参数 -->
+                    <javaOptions>
+                        <option>--enable-preview</option>
+                    </javaOptions>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/modules</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 复制配置文件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/config</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>check.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}">
+                                    <fileset dir="D:\Download\Google\tools\openjfx-21.0.4_windows-x64_bin-sdk\javafx-sdk-21.0.4\bin"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals><goal>run</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                    <include>**/*.json</include>
+                    <include>**/*.css</include>
+                    <include>**/*</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

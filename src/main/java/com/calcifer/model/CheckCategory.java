@@ -1,4 +1,4 @@
-package com.calcifer.modedl;
+package com.calcifer.model;
 
 /**
  * Author: CYC

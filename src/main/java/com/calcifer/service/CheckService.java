@@ -1,12 +1,18 @@
 package com.calcifer.service;
 
 /**
- * Author: CYC
- * Time: 2025/7/23 16:19:27
- * Description:
- * Branch:
- * Version: 1.0
+ * @author CYC
  */
-
 public class CheckService {
+    public enum ConditionType {
+        /**
+         *
+         */
+        EQUALS,
+        CONTAINS,
+        MULTI_CONDITION,
+        QUERY_ONLY,
+        NOT_CONTAINS,
+        LOG_FILTER
+    }
 }
